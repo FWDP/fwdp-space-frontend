@@ -59,10 +59,11 @@ export default function RegisterPage() {
             { label: "Confirm Password", key: "password_confirmation", type: "password" },
           ].map(({ label, key, type }) => (
             <div key={key}>
-              <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor={key} className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 {label}
               </label>
               <input
+                id={key}
                 type={type}
                 required
                 value={form[key as keyof typeof form]}

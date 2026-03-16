@@ -20,11 +20,15 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401 globally — clear token and redirect to login
+// Auth endpoints handle their own errors — only redirect on 401 for authenticated calls
+const AUTH_ENDPOINTS = ["/api/auth/login", "/api/auth/register"];
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const url = error.config?.url ?? "";
+    const isAuthEndpoint = AUTH_ENDPOINTS.some((e) => url.endsWith(e));
+    if (error.response?.status === 401 && !isAuthEndpoint) {
       Cookies.remove(TOKEN_KEY);
       if (typeof window !== "undefined") {
         window.location.href = "/login";
